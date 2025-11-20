@@ -89,6 +89,51 @@
       "check_script": "check_rsyslog.sh",
       "remediation_script": "fix_rsyslog.sh",
       "category": "auditing"
+    },
+    {
+      "rule_id": "UBTU-24-100300",
+      "severity": "high",
+      "title": "Must install a firewall application (UFW)",
+      "description": "Need host-based firewall to automatically control remote access methods",
+      "check_script": "check_ufw_installed.sh",
+      "remediation_script": "fix_ufw_installed.sh",
+      "category": "network_security"
+    },
+    {
+      "rule_id": "UBTU-24-100310",
+      "severity": "high",
+      "title": "Uncomplicated Firewall (UFW) must be in active state",
+      "description": "Inactive firewall leaves all ports open, very high risk of remote attacks",
+      "check_script": "check_ufw_active.sh",
+      "remediation_script": "fix_ufw_active.sh",
+      "category": "network_security"
+    },
+    {
+      "rule_id": "UBTU-24-100400",
+      "severity": "high",
+      "title": "Must install auditd service",
+      "description": "auditd is core component for real-time security event logging",
+      "check_script": "check_auditd_installed.sh",
+      "remediation_script": "fix_auditd_installed.sh",
+      "category": "auditing"
+    },
+    {
+      "rule_id": "UBTU-24-100410",
+      "severity": "high",
+      "title": "Auditd service must be enabled and active at boot",
+      "description": "If auditd not running, lose entire audit trail",
+      "check_script": "check_auditd_enabled.sh",
+      "remediation_script": "fix_auditd_enabled.sh",
+      "category": "auditing"
+    },
+    {
+      "rule_id": "UBTU-24-100450",
+      "severity": "high",
+      "title": "Audispd must offload audit records to remote server",
+      "description": "Local logs easily deleted/tampered when system compromised",
+      "check_script": "check_audispd_remote.sh",
+      "remediation_script": "fix_audispd_remote.sh",
+      "category": "auditing"
     }
   ]
 }
