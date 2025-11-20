@@ -1,111 +1,93 @@
 {
   "rules": [
     {
-      "rule_id": "UBTU-24-010001",
+      "rule_id": "UBTU-24-90890",
       "severity": "high",
-      "title": "System must disable accounts after 35 days of inactivity",
-      "description": "Inactive accounts should be disabled to reduce attack surface",
-      "check_script": "check_account_inactivity.sh",
-      "remediation_script": "fix_account_inactivity.sh",
-      "category": "account_management"
+      "title": "System must use encryption to protect audit tools",
+      "description": "Prevent modification of audit tools to hide activities",
+      "check_script": "check_aide_audit_tools.sh",
+      "remediation_script": "fix_aide_audit_tools.sh",
+      "category": "integrity"
     },
     {
-      "rule_id": "UBTU-24-010002",
+      "rule_id": "UBTU-24-100010",
       "severity": "high",
-      "title": "Password complexity requirements must be enforced",
-      "description": "Passwords must meet minimum complexity requirements",
-      "check_script": "check_password_complexity.sh",
-      "remediation_script": "fix_password_complexity.sh",
-      "category": "authentication"
+      "title": "System must not have systemd-timesyncd package installed",
+      "description": "Inaccurate time makes it difficult to correlate events and analyze",
+      "check_script": "check_no_timesyncd.sh",
+      "remediation_script": "fix_no_timesyncd.sh",
+      "category": "system_configuration"
     },
     {
-      "rule_id": "UBTU-24-010003",
+      "rule_id": "UBTU-24-100020",
       "severity": "high",
-      "title": "Minimum password age must be configured",
-      "description": "Passwords must have minimum age of 1 day",
-      "check_script": "check_password_min_age.sh",
-      "remediation_script": "fix_password_min_age.sh",
-      "category": "authentication"
+      "title": "System must not have ntp package installed",
+      "description": "NTP is no longer recommended, vulnerable to attacks and lacks accuracy",
+      "check_script": "check_no_ntp.sh",
+      "remediation_script": "fix_no_ntp.sh",
+      "category": "system_configuration"
     },
     {
-      "rule_id": "UBTU-24-010004",
+      "rule_id": "UBTU-24-100030",
       "severity": "high",
-      "title": "Maximum password age must be configured",
-      "description": "Passwords must have maximum age of 60 days",
-      "check_script": "check_password_max_age.sh",
-      "remediation_script": "fix_password_max_age.sh",
-      "category": "authentication"
-    },
-    {
-      "rule_id": "UBTU-24-010005",
-      "severity": "medium",
-      "title": "SSH must be configured to use only FIPS 140-2 validated ciphers",
-      "description": "SSH must use approved cryptographic algorithms",
-      "check_script": "check_ssh_ciphers.sh",
-      "remediation_script": "fix_ssh_ciphers.sh",
+      "title": "System must not have telnetd package installed",
+      "description": "Telnet transmits passwords in plaintext, easy to sniff and exploit",
+      "check_script": "check_no_telnetd.sh",
+      "remediation_script": "fix_no_telnetd.sh",
       "category": "network_security"
     },
     {
-      "rule_id": "UBTU-24-010006",
+      "rule_id": "UBTU-24-100040",
       "severity": "high",
-      "title": "Root login via SSH must be disabled",
-      "description": "Direct root login via SSH poses security risk",
-      "check_script": "check_ssh_root_login.sh",
-      "remediation_script": "fix_ssh_root_login.sh",
+      "title": "System must not have rsh-server package installed",
+      "description": "RSH transmits passwords in plaintext, similar to telnet",
+      "check_script": "check_no_rsh.sh",
+      "remediation_script": "fix_no_rsh.sh",
       "category": "network_security"
     },
     {
-      "rule_id": "UBTU-24-010007",
-      "severity": "medium",
-      "title": "File integrity tool must be installed",
-      "description": "AIDE or similar tool must be configured",
+      "rule_id": "UBTU-24-100100",
+      "severity": "high",
+      "title": "OS must install AIDE for integrity checking",
+      "description": "Ensure detection of errors or intrusion file system changes",
       "check_script": "check_aide_installed.sh",
       "remediation_script": "fix_aide_installed.sh",
       "category": "integrity"
     },
     {
-      "rule_id": "UBTU-24-010008",
+      "rule_id": "UBTU-24-100110",
       "severity": "high",
-      "title": "Auditd must be installed and active",
-      "description": "System auditing must be enabled",
-      "check_script": "check_auditd.sh",
-      "remediation_script": "fix_auditd.sh",
-      "category": "auditing"
+      "title": "Configure AIDE to perform integrity checks",
+      "description": "Ensure system detects unauthorized changes",
+      "check_script": "check_aide_configured.sh",
+      "remediation_script": "fix_aide_configured.sh",
+      "category": "integrity"
     },
     {
-      "rule_id": "UBTU-24-010009",
+      "rule_id": "UBTU-24-100120",
       "severity": "medium",
-      "title": "Firewall must be enabled",
-      "description": "UFW or iptables must be active",
-      "check_script": "check_firewall.sh",
-      "remediation_script": "fix_firewall.sh",
-      "category": "network_security"
+      "title": "AIDE must use default script to run periodically",
+      "description": "Ensure continuous automatic checking",
+      "check_script": "check_aide_cron.sh",
+      "remediation_script": "fix_aide_cron.sh",
+      "category": "integrity"
     },
     {
-      "rule_id": "UBTU-24-010010",
-      "severity": "high",
-      "title": "Automatic updates must be configured",
-      "description": "System must apply security updates automatically",
-      "check_script": "check_auto_updates.sh",
-      "remediation_script": "fix_auto_updates.sh",
-      "category": "system_maintenance"
-    },
-    {
-      "rule_id": "UBTU-24-010011",
+      "rule_id": "UBTU-24-100130",
       "severity": "medium",
-      "title": "Core dumps must be restricted",
-      "description": "Core dumps can contain sensitive information",
-      "check_script": "check_core_dumps.sh",
-      "remediation_script": "fix_core_dumps.sh",
-      "category": "system_hardening"
+      "title": "AIDE must send alerts when baseline is changed",
+      "description": "Prevent configuration changes from being missed",
+      "check_script": "check_aide_alerts.sh",
+      "remediation_script": "fix_aide_alerts.sh",
+      "category": "integrity"
     },
     {
-      "rule_id": "UBTU-24-010012",
+      "rule_id": "UBTU-24-100200",
       "severity": "high",
-      "title": "System must log all sudo commands",
-      "description": "All privilege escalation must be logged",
-      "check_script": "check_sudo_logging.sh",
-      "remediation_script": "fix_sudo_logging.sh",
+      "title": "OS must store failure events using rsyslog",
+      "description": "Ensure logs are maintained for forensics and recovery",
+      "check_script": "check_rsyslog.sh",
+      "remediation_script": "fix_rsyslog.sh",
       "category": "auditing"
     }
   ]
