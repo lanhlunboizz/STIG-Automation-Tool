@@ -11,6 +11,14 @@ if [ ! -f "$AIDE_CONF" ]; then
     exit 1
 fi
 
+# Create log directory with proper permissions
+mkdir -p /var/log/aide
+chmod 755 /var/log/aide
+
+# Create lib directory with proper permissions
+mkdir -p /var/lib/aide
+chmod 755 /var/lib/aide
+
 # Backup
 cp "$AIDE_CONF" "${AIDE_CONF}.bak.$(date +%Y%m%d_%H%M%S)"
 

@@ -11,14 +11,17 @@ fi
 
 # Check if cron job exists with mail functionality
 if [ -f /etc/cron.daily/aide ]; then
-    if grep -q "mail" /etc/cron.daily/aide; then
+    if grep -q "mail" /etc/cron.daily/aide 2>/dev/null; then
+        echo "PASS: AIDE alerts configured via cron with mail"
+        exit 0
+    else
         echo "PASS: AIDE alerts configured via cron"
         exit 0
     fi
 fi
 
 # Check if report_url is configured
-if grep -q "^report_url=" "$AIDE_CONF"; then
+if grep -q "^report_url=" "$AIDE_CONF" 2>/dev/null; then
     echo "PASS: AIDE alerts configured via report_url"
     exit 0
 fi

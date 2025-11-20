@@ -9,6 +9,14 @@ if ! command -v aide &> /dev/null; then
     exit 1
 fi
 
+# Create log directory with proper permissions
+mkdir -p /var/log/aide
+chmod 755 /var/log/aide
+
+# Create lib directory if not exists
+mkdir -p /var/lib/aide
+chmod 755 /var/lib/aide
+
 # Check if database already exists
 if [ -f /var/lib/aide/aide.db ] || [ -f /var/lib/aide/aide.db.gz ]; then
     echo "AIDE database already exists"

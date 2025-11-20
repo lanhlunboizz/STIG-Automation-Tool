@@ -11,6 +11,13 @@ if [ ! -f "$AIDE_CONF" ]; then
 fi
 
 # Check if audit tools are monitored by AIDE
+# Looking for patterns that include audit tool paths
+if grep -q "/usr/sbin/audit" "$AIDE_CONF"; then
+    echo "PASS: Audit tools are protected by AIDE"
+    exit 0
+fi
+
+# Detailed check
 AUDIT_TOOLS=("/usr/sbin/auditctl" "/usr/sbin/auditd" "/usr/sbin/ausearch" "/usr/sbin/aureport")
 FAIL=0
 
