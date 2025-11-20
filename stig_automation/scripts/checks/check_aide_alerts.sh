@@ -9,11 +9,19 @@ if [ ! -f "$AIDE_CONF" ]; then
     exit 1
 fi
 
-# Check if mail alerts are configured
-if grep -q "^report_url=" "$AIDE_CONF" || [ -f /etc/cron.daily/aide ]; then
-    echo "PASS: AIDE alerts configured"
-    exit 0
-else
-    echo "FAIL: AIDE alerts not configured"
-    exit 1
+# Check if cron job exists with mail functionality
+if [ -f /etc/cron.daily/aide ]; then
+    if grep -q "mail" /etc/cron.daily/aide; then
+        echo "PASS: AIDE alerts configured via cron"
+        exit 0
+    fi
 fi
+
+# Check if report_url is configured
+if grep -q "^report_url=" "$AIDE_CONF"; then
+    echo "PASS: AIDE alerts configured via report_url"
+    exit 0
+fi
+
+echo "FAIL: AIDE alerts not configured"
+exit 1

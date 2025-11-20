@@ -26,11 +26,21 @@ cat >> "$AIDE_CONF" <<'EOF'
 EOF
 
 # Reinitialize AIDE database
-echo "Reinitializing AIDE database..."
-aideinit
-if [ -f /var/lib/aide/aide.db.new ]; then
-    mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
-fi
+echo "Reinitializing AIDE database (this may take a few minutes)..."
+aideinit 2>&1
 
-echo "Audit tools protection configured"
-exit 0
+# Wait for completion
+sleep 2
+
+if [ -f /var/lib/aide/aide.db.new ]; then
+    mv -f /var/lib/aide/aide.db.new /var/lib/aide/aide.db
+    echo "Audit tools protection configured and AIDE database updated"
+    exit 0
+elif [ -f /var/lib/aide/aide.db.new.gz ]; then
+    mv -f /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+    echo "Audit tools protection configured and AIDE database updated"
+    exit 0
+else
+    echo "WARNING: AIDE database update may still be running"
+    exit 0
+fi
