@@ -1,0 +1,46 @@
+# STIG Automation Configuration
+
+# Execution Mode
+default_mode: local # local or ssh
+
+# SSH Configuration (if mode = ssh)
+ssh:
+    host: ""
+    port: 22
+    username: ""
+    key_file: ""
+    password: "" # Leave empty to use key_file
+
+# Paths
+paths:
+    reports_dir: "./reports"
+    logs_dir: "./logs"
+    rules_file: "./config/stig_rules.json"
+    check_scripts_dir: "./scripts/checks"
+    remediation_scripts_dir: "./scripts/remediation"
+
+# Behavior
+behavior:
+    auto_remediate: false # Auto-fix failed checks
+    backup_before_remediation: true
+    continue_on_error: true
+    re_validate_after_fix: true
+    max_retry: 3
+
+# Reporting
+reporting:
+    format: html # html, json, or both
+    include_pass: true
+    include_details: true
+    send_email: false
+
+# Logging
+logging:
+    level: INFO # DEBUG, INFO, WARNING, ERROR
+    console_output: true
+    file_output: true
+
+# Timeouts (seconds)
+timeouts:
+    command_execution: 60
+    ssh_connection: 30
