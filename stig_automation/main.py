@@ -356,6 +356,14 @@ def main():
             
             logger.info(f"Reports: {reports_dir}")
             logger.info(f"Logs: {logs_dir}")
+            logger.info("")
+            logger.info("View Reports:")
+            if html_report:
+                html_abs_path = os.path.abspath(html_report)
+                logger.info(f"  HTML: file://{html_abs_path}")
+            if json_report:
+                json_abs_path = os.path.abspath(json_report)
+                logger.info(f"  JSON: file://{json_abs_path}")
             logger.info("=" * 80)
             logger.info("✓ Execution completed successfully")
             

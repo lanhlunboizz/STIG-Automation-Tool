@@ -72,11 +72,8 @@ class STIGReporter:
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(html_content)
         
-        # Fix permissions (make readable/writable by all users)
-        try:
-            os.chmod(filepath, 0o666)
-        except Exception as e:
-            self.logger.warning(f"Could not change file permissions: {e}")
+        # Fix permissions and ownership
+        self._fix_file_permissions(filepath)
         
         self.logger.info(f"HTML report generated: {filepath}")
         return filepath
@@ -115,14 +112,30 @@ class STIGReporter:
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(report_data, f, indent=2, ensure_ascii=False)
         
-        # Fix permissions (make readable/writable by all users)
-        try:
-            os.chmod(filepath, 0o666)
-        except Exception as e:
-            self.logger.warning(f"Could not change file permissions: {e}")
+        # Fix permissions and ownership
+        self._fix_file_permissions(filepath)
         
         self.logger.info(f"JSON report generated: {filepath}")
         return filepath
+    
+    def _fix_file_permissions(self, filepath: str):
+        """Fix file permissions and ownership for reports"""
+        try:
+            # Set permissions to 0o666 (rw-rw-rw-)
+            os.chmod(filepath, 0o666)
+            
+            # If running with sudo, change ownership to the actual user
+            sudo_user = os.environ.get('SUDO_USER')
+            if sudo_user:
+                import pwd
+                try:
+                    user_info = pwd.getpwnam(sudo_user)
+                    os.chown(filepath, user_info.pw_uid, user_info.pw_gid)
+                    self.logger.debug(f"Changed ownership of {filepath} to {sudo_user}")
+                except Exception as e:
+                    self.logger.warning(f"Could not change ownership: {e}")
+        except Exception as e:
+            self.logger.warning(f"Could not fix file permissions: {e}")
     
     def _calculate_summary(self, results: List[Dict]) -> Dict:
         """Tính toán summary từ check results"""
