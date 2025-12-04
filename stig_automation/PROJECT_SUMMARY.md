@@ -147,23 +147,6 @@ python3 main.py --mode ssh \
     --auto-remediate
 ```
 
-## 📊 12 STIG Rules được implement
-
-| Rule ID        | Severity | Category           | Description                |
-| -------------- | -------- | ------------------ | -------------------------- |
-| UBTU-24-010001 | HIGH     | Account Management | Account inactivity timeout |
-| UBTU-24-010002 | HIGH     | Authentication     | Password complexity        |
-| UBTU-24-010003 | HIGH     | Authentication     | Minimum password age       |
-| UBTU-24-010004 | HIGH     | Authentication     | Maximum password age       |
-| UBTU-24-010005 | MEDIUM   | Network Security   | SSH FIPS ciphers           |
-| UBTU-24-010006 | HIGH     | Network Security   | SSH root login disabled    |
-| UBTU-24-010007 | MEDIUM   | Integrity          | AIDE installed             |
-| UBTU-24-010008 | HIGH     | Auditing           | Auditd active              |
-| UBTU-24-010009 | MEDIUM   | Network Security   | Firewall enabled           |
-| UBTU-24-010010 | HIGH     | System Maintenance | Auto updates               |
-| UBTU-24-010011 | MEDIUM   | System Hardening   | Core dumps restricted      |
-| UBTU-24-010012 | HIGH     | Auditing           | Sudo logging               |
-
 ## 🔧 Mở rộng
 
 ### Thêm rule mới

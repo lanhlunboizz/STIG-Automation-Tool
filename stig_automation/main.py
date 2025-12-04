@@ -191,6 +191,19 @@ def main():
         logger.info(f"Checking specific rules: {', '.join(rule_ids)}")
     
     try:
+        # Auto chmod +x for all scripts (local mode only)
+        if args.mode == 'local':
+            logger.info("Setting execute permissions for scripts...")
+            import glob
+            for script_dir in ['scripts/checks', 'scripts/remediation']:
+                script_pattern = os.path.join(config['paths']['scripts_dir'], script_dir.split('/')[-1], '*.sh')
+                for script in glob.glob(script_pattern):
+                    try:
+                        os.chmod(script, 0o755)
+                    except Exception as e:
+                        logger.warning(f"Could not chmod {script}: {e}")
+            logger.info("Execute permissions set for all scripts")
+        
         # Initialize executor
         logger.info("Initializing command executor...")
         with CommandExecutor(mode=args.mode, ssh_config=ssh_config) as executor:

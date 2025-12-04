@@ -2,7 +2,7 @@
 # Remediation: Configure audispd remote logging
 # Rule: UBTU-24-100450
 
-echo "Configuring audispd remote logging..."
+echo "Starting remediation: Configuring audispd remote logging..."
 
 AUDISP_REMOTE_CONF="/etc/audisp/plugins.d/au-remote.conf"
 AUDISP_CONF="/etc/audisp/audisp-remote.conf"

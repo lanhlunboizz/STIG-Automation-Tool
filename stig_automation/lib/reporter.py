@@ -72,9 +72,9 @@ class STIGReporter:
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(html_content)
         
-        # Fix permissions (make readable/writable by owner and group)
+        # Fix permissions (make readable/writable by all users)
         try:
-            os.chmod(filepath, 0o664)
+            os.chmod(filepath, 0o666)
         except Exception as e:
             self.logger.warning(f"Could not change file permissions: {e}")
         
@@ -115,9 +115,9 @@ class STIGReporter:
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(report_data, f, indent=2, ensure_ascii=False)
         
-        # Fix permissions (make readable/writable by owner and group)
+        # Fix permissions (make readable/writable by all users)
         try:
-            os.chmod(filepath, 0o664)
+            os.chmod(filepath, 0o666)
         except Exception as e:
             self.logger.warning(f"Could not change file permissions: {e}")
         

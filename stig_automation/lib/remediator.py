@@ -103,6 +103,16 @@ class STIGRemediator:
             self.logger.info(f"Executing remediation: {script_path}")
             returncode, stdout, stderr = self.executor.execute_script(script_path, timeout=120)
             
+            # Log script output for visibility
+            if stdout:
+                for line in stdout.strip().split('\n'):
+                    if line.strip():
+                        self.logger.info(f"  {rule_id}: {line}")
+            if stderr:
+                for line in stderr.strip().split('\n'):
+                    if line.strip():
+                        self.logger.warning(f"  {rule_id} stderr: {line}")
+            
             result['details'] = stdout.strip() if stdout else stderr.strip()
             
             if returncode == 0:
@@ -112,7 +122,7 @@ class STIGRemediator:
             else:
                 result['status'] = 'FAILED' if not force else 'PARTIAL'
                 result['message'] = f'Remediation failed with exit code {returncode}'
-                self.logger.warning(f"Rule {rule_id}: Remediation FAILED")
+                self.logger.warning(f"Rule {rule_id}: Remediation FAILED (exit code {returncode})")
             
         except Exception as e:
             result['status'] = 'ERROR'
