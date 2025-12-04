@@ -179,6 +179,51 @@
       "check_script": "UBTU-24-100660.sh",
       "remediation_script": "UBTU-24-100660.sh",
       "category": "authentication"
+    },
+    {
+      "rule_id": "UBTU-24-100700",
+      "severity": "high",
+      "title": "OS must install chrony package for time synchronization",
+      "description": "Ensure system time is accurately synchronized for logging and event analysis",
+      "check_script": "UBTU-24-100700.sh",
+      "remediation_script": "UBTU-24-100700.sh",
+      "category": "time_synchronization"
+    },
+    {
+      "rule_id": "UBTU-24-100800",
+      "severity": "high",
+      "title": "OS must install SSH (OpenSSH server)",
+      "description": "Protect network communications with encryption, replacing insecure protocols (telnet, rsh)",
+      "check_script": "UBTU-24-100800.sh",
+      "remediation_script": "UBTU-24-100800.sh",
+      "category": "secure_communication"
+    },
+    {
+      "rule_id": "UBTU-24-100810",
+      "severity": "high",
+      "title": "OS must use SSH to protect confidentiality and integrity of information",
+      "description": "Ensure all information is encrypted during transmission, preventing data exposure",
+      "check_script": "UBTU-24-100810.sh",
+      "remediation_script": "UBTU-24-100810.sh",
+      "category": "secure_communication"
+    },
+    {
+      "rule_id": "UBTU-24-100820",
+      "severity": "high",
+      "title": "OS must configure SSH daemon to use FIPS 140-3 approved ciphers",
+      "description": "Ensure SSH only uses strong FIPS-approved ciphers to protect data",
+      "check_script": "UBTU-24-100820.sh",
+      "remediation_script": "UBTU-24-100820.sh",
+      "category": "secure_communication"
+    },
+    {
+      "rule_id": "UBTU-24-100830",
+      "severity": "high",
+      "title": "OS must configure SSH daemon to use FIPS 140-3 approved MACs",
+      "description": "Ensure SSH uses HMAC-SHA2 MACs to protect integrity; weak MACs are vulnerable to attacks",
+      "check_script": "UBTU-24-100830.sh",
+      "remediation_script": "UBTU-24-100830.sh",
+      "category": "secure_communication"
     }
   ]
 }
