@@ -17,7 +17,8 @@ echo "✓ Python 3 found: $(python3 --version)"
 # Install dependencies
 echo ""
 echo "Installing Python dependencies..."
-apt install python3-venv -y
+sudo apt-get update
+sudo apt-get install -y python3-pip python3-venv
 python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirements.txt
@@ -42,8 +43,8 @@ echo ""
 echo "  # Check locally (no remediation)"
 echo "  python3 main.py --mode local --check-only"
 echo ""
-echo "  # Check and auto-fix locally"
-echo "  sudo python3 main.py --mode local --auto-remediate"
+echo "  # Check and auto-fix locally (recommended)"
+echo "  ./run_with_sudo.sh --mode local --auto-remediate"
 echo ""
 echo "  # Check via SSH"
 echo "  python3 main.py --mode ssh --host 192.168.1.100 --user ubuntu --key ~/.ssh/id_rsa"

@@ -42,25 +42,29 @@ pip install -r requirements.txt
 ### Chạy trên local:
 
 ```bash
-python main.py --mode local
+python3 main.py --mode local
 ```
 
 ### Chạy qua SSH:
 
 ```bash
-python main.py --mode ssh --host 192.168.1.100 --user ubuntu --key /path/to/key
+python3 main.py --mode ssh --host 192.168.1.100 --user ubuntu --key /path/to/key
 ```
 
 ### Chỉ kiểm tra (không remediation):
 
 ```bash
-python main.py --mode local --check-only
+python3 main.py --mode local --check-only
 ```
 
 ### Kiểm tra và tự động sửa:
 
 ```bash
-python main.py --mode local --auto-remediate
+# Sử dụng wrapper script (khuyến khích)
+./run_with_sudo.sh --mode local --auto-remediate
+
+# Hoặc chạy trực tiếp với sudo
+sudo ./venv/bin/python3 main.py --mode local --auto-remediate
 ```
 
 ## Quy trình hoạt động
