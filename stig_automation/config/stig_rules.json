@@ -5,8 +5,8 @@
       "severity": "high",
       "title": "System must use encryption to protect audit tools",
       "description": "Prevent modification of audit tools to hide activities",
-      "check_script": "check_aide_audit_tools.sh",
-      "remediation_script": "fix_aide_audit_tools.sh",
+      "check_script": "UBTU-24-90890.sh",
+      "remediation_script": "UBTU-24-90890.sh",
       "category": "integrity"
     },
     {
@@ -14,8 +14,8 @@
       "severity": "high",
       "title": "System must not have systemd-timesyncd package installed",
       "description": "Inaccurate time makes it difficult to correlate events and analyze",
-      "check_script": "check_no_timesyncd.sh",
-      "remediation_script": "fix_no_timesyncd.sh",
+      "check_script": "UBTU-24-100010.sh",
+      "remediation_script": "UBTU-24-100010.sh",
       "category": "system_configuration"
     },
     {
@@ -23,8 +23,8 @@
       "severity": "high",
       "title": "System must not have ntp package installed",
       "description": "NTP is no longer recommended, vulnerable to attacks and lacks accuracy",
-      "check_script": "check_no_ntp.sh",
-      "remediation_script": "fix_no_ntp.sh",
+      "check_script": "UBTU-24-100020.sh",
+      "remediation_script": "UBTU-24-100020.sh",
       "category": "system_configuration"
     },
     {
@@ -32,8 +32,8 @@
       "severity": "high",
       "title": "System must not have telnetd package installed",
       "description": "Telnet transmits passwords in plaintext, easy to sniff and exploit",
-      "check_script": "check_no_telnetd.sh",
-      "remediation_script": "fix_no_telnetd.sh",
+      "check_script": "UBTU-24-100030.sh",
+      "remediation_script": "UBTU-24-100030.sh",
       "category": "network_security"
     },
     {
@@ -41,8 +41,8 @@
       "severity": "high",
       "title": "System must not have rsh-server package installed",
       "description": "RSH transmits passwords in plaintext, similar to telnet",
-      "check_script": "check_no_rsh.sh",
-      "remediation_script": "fix_no_rsh.sh",
+      "check_script": "UBTU-24-100040.sh",
+      "remediation_script": "UBTU-24-100040.sh",
       "category": "network_security"
     },
     {
@@ -50,8 +50,8 @@
       "severity": "high",
       "title": "OS must install AIDE for integrity checking",
       "description": "Ensure detection of errors or intrusion file system changes",
-      "check_script": "check_aide_installed.sh",
-      "remediation_script": "fix_aide_installed.sh",
+      "check_script": "UBTU-24-100100.sh",
+      "remediation_script": "UBTU-24-100100.sh",
       "category": "integrity"
     },
     {
@@ -59,8 +59,8 @@
       "severity": "high",
       "title": "Configure AIDE to perform integrity checks",
       "description": "Ensure system detects unauthorized changes",
-      "check_script": "check_aide_configured.sh",
-      "remediation_script": "fix_aide_configured.sh",
+      "check_script": "UBTU-24-100110.sh",
+      "remediation_script": "UBTU-24-100110.sh",
       "category": "integrity"
     },
     {
@@ -68,8 +68,8 @@
       "severity": "medium",
       "title": "AIDE must use default script to run periodically",
       "description": "Ensure continuous automatic checking",
-      "check_script": "check_aide_cron.sh",
-      "remediation_script": "fix_aide_cron.sh",
+      "check_script": "UBTU-24-100120.sh",
+      "remediation_script": "UBTU-24-100120.sh",
       "category": "integrity"
     },
     {
@@ -77,8 +77,8 @@
       "severity": "medium",
       "title": "AIDE must send alerts when baseline is changed",
       "description": "Prevent configuration changes from being missed",
-      "check_script": "check_aide_alerts.sh",
-      "remediation_script": "fix_aide_alerts.sh",
+      "check_script": "UBTU-24-100130.sh",
+      "remediation_script": "UBTU-24-100130.sh",
       "category": "integrity"
     },
     {
@@ -86,8 +86,8 @@
       "severity": "high",
       "title": "OS must store failure events using rsyslog",
       "description": "Ensure logs are maintained for forensics and recovery",
-      "check_script": "check_rsyslog.sh",
-      "remediation_script": "fix_rsyslog.sh",
+      "check_script": "UBTU-24-100200.sh",
+      "remediation_script": "UBTU-24-100200.sh",
       "category": "auditing"
     },
     {
@@ -95,8 +95,8 @@
       "severity": "high",
       "title": "Must install a firewall application (UFW)",
       "description": "Need host-based firewall to automatically control remote access methods",
-      "check_script": "check_ufw_installed.sh",
-      "remediation_script": "fix_ufw_installed.sh",
+      "check_script": "UBTU-24-100300.sh",
+      "remediation_script": "UBTU-24-100300.sh",
       "category": "network_security"
     },
     {
@@ -104,8 +104,8 @@
       "severity": "high",
       "title": "Uncomplicated Firewall (UFW) must be in active state",
       "description": "Inactive firewall leaves all ports open, very high risk of remote attacks",
-      "check_script": "check_ufw_active.sh",
-      "remediation_script": "fix_ufw_active.sh",
+      "check_script": "UBTU-24-100310.sh",
+      "remediation_script": "UBTU-24-100310.sh",
       "category": "network_security"
     },
     {
@@ -113,8 +113,8 @@
       "severity": "high",
       "title": "Must install auditd service",
       "description": "auditd is core component for real-time security event logging",
-      "check_script": "check_auditd_installed.sh",
-      "remediation_script": "fix_auditd_installed.sh",
+      "check_script": "UBTU-24-100400.sh",
+      "remediation_script": "UBTU-24-100400.sh",
       "category": "auditing"
     },
     {
@@ -122,8 +122,8 @@
       "severity": "high",
       "title": "Auditd service must be enabled and active at boot",
       "description": "If auditd not running, lose entire audit trail",
-      "check_script": "check_auditd_enabled.sh",
-      "remediation_script": "fix_auditd_enabled.sh",
+      "check_script": "UBTU-24-100410.sh",
+      "remediation_script": "UBTU-24-100410.sh",
       "category": "auditing"
     },
     {
@@ -131,8 +131,8 @@
       "severity": "high",
       "title": "Audispd must offload audit records to remote server",
       "description": "Local logs easily deleted/tampered when system compromised",
-      "check_script": "check_audispd_remote.sh",
-      "remediation_script": "fix_audispd_remote.sh",
+      "check_script": "UBTU-24-100450.sh",
+      "remediation_script": "UBTU-24-100450.sh",
       "category": "auditing"
     }
   ]
