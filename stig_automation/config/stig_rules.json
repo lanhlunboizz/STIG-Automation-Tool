@@ -134,6 +134,51 @@
       "check_script": "UBTU-24-100450.sh",
       "remediation_script": "UBTU-24-100450.sh",
       "category": "auditing"
+    },
+    {
+      "rule_id": "UBTU-24-100500",
+      "severity": "high",
+      "title": "OS must install apparmor package",
+      "description": "Without AppArmor, system vulnerable to uncontrolled program exploitation",
+      "check_script": "UBTU-24-100500.sh",
+      "remediation_script": "UBTU-24-100500.sh",
+      "category": "mandatory_access_control"
+    },
+    {
+      "rule_id": "UBTU-24-100510",
+      "severity": "high",
+      "title": "OS must be configured to use AppArmor",
+      "description": "Missing AppArmor removes critical protection layer against unwanted programs",
+      "check_script": "UBTU-24-100510.sh",
+      "remediation_script": "UBTU-24-100510.sh",
+      "category": "mandatory_access_control"
+    },
+    {
+      "rule_id": "UBTU-24-100600",
+      "severity": "high",
+      "title": "OS must install libpam-pwquality package",
+      "description": "Ensure passwords are strong enough to resist brute-force and cracking",
+      "check_script": "UBTU-24-100600.sh",
+      "remediation_script": "UBTU-24-100600.sh",
+      "category": "authentication"
+    },
+    {
+      "rule_id": "UBTU-24-100650",
+      "severity": "high",
+      "title": "OS must install sssd package",
+      "description": "Provides centralized authentication and MFA support for privileged accounts",
+      "check_script": "UBTU-24-100650.sh",
+      "remediation_script": "UBTU-24-100650.sh",
+      "category": "authentication"
+    },
+    {
+      "rule_id": "UBTU-24-100660",
+      "severity": "high",
+      "title": "OS must use sssd to provide multifactor authentication (MFA)",
+      "description": "Ensure SSSD service is running to support MFA for privileged accounts",
+      "check_script": "UBTU-24-100660.sh",
+      "remediation_script": "UBTU-24-100660.sh",
+      "category": "authentication"
     }
   ]
 }
