@@ -196,7 +196,7 @@ def main():
             logger.info("Setting execute permissions for scripts...")
             import glob
             for script_dir in ['scripts/checks', 'scripts/remediation']:
-                script_pattern = os.path.join(config['paths']['scripts_dir'], script_dir.split('/')[-1], '*.sh')
+                script_pattern = os.path.join(script_dir, '*.sh')
                 for script in glob.glob(script_pattern):
                     try:
                         os.chmod(script, 0o755)
