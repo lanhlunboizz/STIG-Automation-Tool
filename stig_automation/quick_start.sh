@@ -17,7 +17,6 @@ echo "✓ Python 3 found: $(python3 --version)"
 # Install dependencies
 echo ""
 echo "Installing Python dependencies..."
-sudo apt-get update
 sudo apt-get install -y python3-pip python3-venv
 python3 -m venv venv
 source venv/bin/activate

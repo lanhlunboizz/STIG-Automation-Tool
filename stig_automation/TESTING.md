@@ -15,7 +15,7 @@ Tài liệu này hướng dẫn cách kiểm tra đầy đủ chức năng của
 source venv/bin/activate
 
 # Test check-only mode
-./run_with_sudo.sh --mode local
+./run_with_sudo.sh --mode local --check-only
 
 # Verify:
 # ✅ All scripts executable (auto chmod +x)
