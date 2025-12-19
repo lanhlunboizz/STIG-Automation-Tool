@@ -287,12 +287,25 @@ def main():
                         logger.info("PHASE 3: Re-Validation Check")
                         logger.info("=" * 80)
                         
-                        # Only re-check rules that were remediated
+                        # Re-check only rules that were remediated
                         remediated_rule_ids = [r['rule_id'] for r in remediation_results]
                         logger.info(f"Re-checking {len(remediated_rule_ids)} remediated rules")
                         
                         post_checker = STIGChecker(executor, rules_file, check_scripts_dir)
-                        post_check_results = post_checker.check_all(remediated_rule_ids)
+                        recheck_results = post_checker.check_all(remediated_rule_ids)
+                        
+                        # Combine with pre-check results: keep PASS from pre-check, update remediated rules
+                        post_check_results = []
+                        recheck_dict = {r['rule_id']: r for r in recheck_results}
+                        
+                        for pre_result in pre_check_results:
+                            rule_id = pre_result['rule_id']
+                            if rule_id in recheck_dict:
+                                # Use re-check result for remediated rules
+                                post_check_results.append(recheck_dict[rule_id])
+                            else:
+                                # Keep pre-check result for non-remediated rules (PASS rules)
+                                post_check_results.append(pre_result)
                         
                         post_summary = post_checker.get_summary()
                         logger.info(f"Post-check Summary: {post_summary['passed']} PASS, {post_summary['failed']} FAIL, {post_summary['errors']} ERROR")
