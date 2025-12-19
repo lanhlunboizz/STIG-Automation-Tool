@@ -1,8 +1,17 @@
 #!/bin/bash
 # Remediation: Enable and start sssd service
-# Per STIG: Enable sssd.service to start automatically and ensure it's running
+# DISABLED: This rule causes authentication lockout issues
+# TODO: Properly configure SSSD before enabling this
 
-echo "Starting remediation: Enabling and starting sssd.service..."
+echo "SKIPPED: UBTU-24-100660 remediation disabled to prevent auth lockout"
+echo "To manually enable SSSD after proper configuration:"
+echo "  1. Configure /etc/sssd/sssd.conf with valid domains"
+echo "  2. systemctl enable sssd.service"
+echo "  3. systemctl start sssd.service"
+exit 0
+
+# Original remediation below (commented out):
+# echo "Starting remediation: Enabling and starting sssd.service..."
 
 # Check current status
 enabled_status=$(systemctl is-enabled sssd.service 2>/dev/null || echo "disabled")

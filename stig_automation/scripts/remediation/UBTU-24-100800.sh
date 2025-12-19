@@ -1,24 +1,30 @@
 #!/bin/bash
-# Remediation: Install OpenSSH server
+# Remediation: Install SSH meta-package
 
-echo "Starting remediation: Installing openssh-server..."
+echo "Starting remediation: Installing ssh meta-package..."
 
-# Check if already installed
-if dpkg -l | grep -q "^ii.*openssh-server"; then
-    echo "openssh-server package is already installed"
+# Check if all required packages are already installed
+if dpkg -l | grep -q "^ii.*openssh-client" && \
+   dpkg -l | grep -q "^ii.*openssh-server" && \
+   dpkg -l | grep -q "^ii.*openssh-sftp-server"; then
+    echo "All openssh packages are already installed"
     exit 0
 fi
 
-# Update package list and install openssh-server
-echo "Installing openssh-server..."
+# Update package list and install ssh meta-package
+# This will install openssh-client, openssh-server, and openssh-sftp-server
+echo "Installing ssh meta-package..."
 apt-get update -qq
-apt-get install -y openssh-server
+apt-get install -y ssh
 
 # Verify installation
-if dpkg -l | grep -q "^ii.*openssh-server"; then
-    echo "SUCCESS: openssh-server installed successfully"
+if dpkg -l | grep -q "^ii.*openssh-client" && \
+   dpkg -l | grep -q "^ii.*openssh-server" && \
+   dpkg -l | grep -q "^ii.*openssh-sftp-server"; then
+    echo "SUCCESS: ssh meta-package installed successfully"
+    echo "Installed: openssh-client, openssh-server, openssh-sftp-server"
     exit 0
 else
-    echo "ERROR: Failed to install openssh-server"
+    echo "ERROR: Failed to install all required openssh packages"
     exit 1
 fi

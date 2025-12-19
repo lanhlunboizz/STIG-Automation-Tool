@@ -4,7 +4,7 @@
 echo "Starting remediation: Configuring SSH FIPS-validated key exchange algorithms..."
 
 SSHD_CONFIG="/etc/ssh/sshd_config"
-FIPS_KEX="ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256"
+FIPS_KEX="ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256,diffie-hellman-group16-sha512,diffie-hellman-group14-sha256"
 
 if [ ! -f "$SSHD_CONFIG" ]; then
     echo "ERROR: $SSHD_CONFIG not found"

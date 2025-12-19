@@ -4,7 +4,8 @@
 echo "Starting remediation: Configuring SSH FIPS-approved ciphers..."
 
 SSHD_CONFIG="/etc/ssh/sshd_config"
-FIPS_CIPHERS="aes256-ctr,aes192-ctr,aes128-ctr,aes256-gcm@openssh.com,aes128-gcm@openssh.com"
+# STIG UBTU-24-100820 requires exactly these 4 ciphers in this order
+FIPS_CIPHERS="aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes128-ctr"
 
 if [ ! -f "$SSHD_CONFIG" ]; then
     echo "ERROR: $SSHD_CONFIG not found"
@@ -28,7 +29,7 @@ else
 fi
 
 # Verify configuration
-if grep -qE "^Ciphers.*aes(256|192|128)-(ctr|gcm@openssh.com)" "$SSHD_CONFIG"; then
+if grep -qE "^Ciphers.*aes(256|128)-(ctr|gcm@openssh.com)" "$SSHD_CONFIG"; then
     echo "Configuration updated successfully"
     
     # Restart SSH daemon
