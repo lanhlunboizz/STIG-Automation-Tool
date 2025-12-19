@@ -278,6 +278,51 @@
       "check_script": "UBTU-24-200260.sh",
       "remediation_script": "UBTU-24-200260.sh",
       "category": "account_management"
+    },
+    {
+      "rule_id": "UBTU-24-200000",
+      "severity": "low",
+      "title": "OS must limit concurrent sessions to ten for all accounts",
+      "description": "Limit helps prevent DoS attacks by preventing too many sessions from one user, protecting system resources",
+      "check_script": "UBTU-24-200000.sh",
+      "remediation_script": "UBTU-24-200000.sh",
+      "category": "session_management"
+    },
+    {
+      "rule_id": "UBTU-24-200610",
+      "severity": "low",
+      "title": "OS must automatically lock account until released by administrator after three failed login attempts",
+      "description": "Account lockout after failed login attempts helps prevent brute-force attacks, reducing unauthorized access risk",
+      "check_script": "UBTU-24-200610.sh",
+      "remediation_script": "UBTU-24-200610.sh",
+      "category": "access_control"
+    },
+    {
+      "rule_id": "UBTU-24-300001",
+      "severity": "low",
+      "title": "OS must be configured to prevent APT from installing patches, service packs, device drivers",
+      "description": "Ensure software integrity, prevent installation of tampered software or malware from untrusted sources",
+      "check_script": "UBTU-24-300001.sh",
+      "remediation_script": "UBTU-24-300001.sh",
+      "category": "software_integrity"
+    },
+    {
+      "rule_id": "UBTU-24-300017",
+      "severity": "low",
+      "title": "OS must enforce delay of at least four seconds between login prompts following a failed login",
+      "description": "Delay slows down brute-force process, reducing attacker opportunity to crack password without affecting legitimate logins",
+      "check_script": "UBTU-24-300017.sh",
+      "remediation_script": "UBTU-24-300017.sh",
+      "category": "access_control"
+    },
+    {
+      "rule_id": "UBTU-24-400340",
+      "severity": "low",
+      "title": "OS must be configured so PAM prohibits use of cached authentications after one day",
+      "description": "Limit cached credentials usage time to ensure validity and reduce risk of using stale information",
+      "check_script": "UBTU-24-400340.sh",
+      "remediation_script": "UBTU-24-400340.sh",
+      "category": "authentication"
     }
   ]
 }
