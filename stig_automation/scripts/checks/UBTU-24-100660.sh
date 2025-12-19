@@ -1,5 +1,6 @@
 #!/bin/bash
 # Check if sssd service is enabled and active
+# Per STIG: Verify sssd.service is enabled and active
 
 enabled_status=$(systemctl is-enabled sssd.service 2>/dev/null)
 active_status=$(systemctl is-active sssd.service 2>/dev/null)
