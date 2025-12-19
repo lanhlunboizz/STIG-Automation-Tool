@@ -1,4 +1,5 @@
 {
+  "total_rules": 35,
   "rules": [
     {
       "rule_id": "UBTU-24-90890",
@@ -287,15 +288,6 @@
       "check_script": "UBTU-24-200000.sh",
       "remediation_script": "UBTU-24-200000.sh",
       "category": "session_management"
-    },
-    {
-      "rule_id": "UBTU-24-200610",
-      "severity": "low",
-      "title": "OS must automatically lock account until released by administrator after three failed login attempts",
-      "description": "Account lockout after failed login attempts helps prevent brute-force attacks, reducing unauthorized access risk",
-      "check_script": "UBTU-24-200610.sh",
-      "remediation_script": "UBTU-24-200610.sh",
-      "category": "access_control"
     },
     {
       "rule_id": "UBTU-24-300001",

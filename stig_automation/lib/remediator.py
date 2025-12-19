@@ -64,6 +64,7 @@ class STIGRemediator:
         rule = self._get_rule_by_id(rule_id)
         
         if not rule:
+            self.logger.error(f"❌ Rule {rule_id} not found in configuration")
             return {
                 'rule_id': rule_id,
                 'status': 'ERROR',
@@ -73,7 +74,12 @@ class STIGRemediator:
         
         remediation_script = rule.get('remediation_script')
         
-        self.logger.info(f"Remediating rule: {rule_id}")
+        self.logger.info(f"\n{'='*80}")
+        self.logger.info(f"🔧 REMEDIATING RULE: {rule_id}")
+        self.logger.info(f"   Title: {rule.get('title', 'N/A')}")
+        self.logger.info(f"   Severity: {rule.get('severity', 'N/A')}")
+        self.logger.info(f"   Category: {rule.get('category', 'N/A')}")
+        self.logger.info(f"{'='*80}")
         
         result = {
             'rule_id': rule_id,
@@ -92,33 +98,52 @@ class STIGRemediator:
         
         script_path = os.path.join(self.remediation_scripts_dir, remediation_script)
         
+        self.logger.debug(f"📄 Script path: {script_path}")
+        self.logger.debug(f"📁 Script exists: {os.path.exists(script_path)}")
+        
         if not os.path.exists(script_path):
             result['status'] = 'ERROR'
             result['message'] = f'Remediation script not found: {script_path}'
-            self.logger.error(result['message'])
+            self.logger.error(f"❌ {result['message']}")
             return result
         
         try:
             # Thực thi remediation script
-            self.logger.info(f"Executing remediation: {script_path}")
+            self.logger.info(f"⚙️  Executing script with 120s timeout...")
+            self.logger.debug(f"   Command: bash {script_path}")
+            
             returncode, stdout, stderr = self.executor.execute_script(script_path, timeout=120)
+            
+            # Log detailed output
+            self.logger.debug(f"\n📊 EXECUTION RESULTS:")
+            self.logger.debug(f"   Return Code: {returncode}")
+            self.logger.debug(f"   STDOUT Length: {len(stdout)} chars")
+            self.logger.debug(f"   STDERR Length: {len(stderr)} chars")
+            
+            if stdout:
+                self.logger.debug(f"\n📤 STDOUT:\n{stdout[:500]}{'...' if len(stdout) > 500 else ''}")
+            if stderr:
+                self.logger.debug(f"\n📤 STDERR:\n{stderr[:500]}{'...' if len(stderr) > 500 else ''}")
             
             result['details'] = stdout.strip() if stdout else stderr.strip()
             
             if returncode == 0:
                 result['status'] = 'SUCCESS'
                 result['message'] = 'Remediation applied successfully'
-                self.logger.info(f"Rule {rule_id}: Remediation SUCCESS")
+                self.logger.info(f"✅ Rule {rule_id}: Remediation SUCCESS")
             else:
                 result['status'] = 'FAILED' if not force else 'PARTIAL'
                 result['message'] = f'Remediation failed with exit code {returncode}'
-                self.logger.warning(f"Rule {rule_id}: Remediation FAILED (exit code {returncode})")
+                self.logger.warning(f"⚠️  Rule {rule_id}: Remediation FAILED (exit code {returncode})")
+                self.logger.warning(f"   Error output: {stderr[:200]}")
             
         except Exception as e:
             result['status'] = 'ERROR'
             result['message'] = f'Remediation error: {str(e)}'
-            self.logger.error(f"Rule {rule_id} remediation error: {e}")
+            self.logger.error(f"💥 Rule {rule_id} remediation error: {e}")
+            self.logger.exception("Full traceback:")  # Log full exception traceback
         
+        self.logger.info(f"{'='*80}\n")
         return result
     
     def remediate_failed_rules(self, failed_results: List[Dict], 
@@ -139,14 +164,18 @@ class STIGRemediator:
             self.logger.info("No failed rules to remediate")
             return self.remediation_results
         
-        self.logger.info(f"Starting remediation for {len(failed_results)} failed rules")
+        self.logger.info(f"\n🚀 Starting remediation for {len(failed_results)} failed rules")
+        self.logger.info(f"   Max retry attempts: {max_retry}")
+        self.logger.info(f"   Failed rules: {', '.join([r.get('rule_id', 'UNKNOWN') for r in failed_results])}\n")
         
-        for failed_rule in failed_results:
+        for idx, failed_rule in enumerate(failed_results, 1):
             rule_id = failed_rule.get('rule_id')
+            
+            self.logger.info(f"\n[{idx}/{len(failed_results)}] Processing rule: {rule_id}")
             
             # Retry mechanism
             for attempt in range(1, max_retry + 1):
-                self.logger.info(f"Remediation attempt {attempt}/{max_retry} for {rule_id}")
+                self.logger.info(f"🔄 Remediation attempt {attempt}/{max_retry} for {rule_id}")
                 
                 result = self.remediate_rule(rule_id)
                 
