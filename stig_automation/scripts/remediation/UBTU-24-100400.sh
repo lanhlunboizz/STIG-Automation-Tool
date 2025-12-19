@@ -2,6 +2,12 @@
 # Remediation: Install auditd
 # Rule: UBTU-24-100400
 
+# Check if running as root
+if [ "$EUID" -ne 0 ]; then
+    echo "ERROR: This script must be run as root or with sudo"
+    exit 1
+fi
+
 echo "Installing auditd..."
 
 # Check if already installed

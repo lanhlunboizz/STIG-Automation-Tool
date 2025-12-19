@@ -2,6 +2,12 @@
 # Remediation: Add AIDE rules for audit tools
 # Rule: UBTU-24-90890
 
+# Check if running as root
+if [ "$EUID" -ne 0 ]; then
+    echo "ERROR: This script must be run as root or with sudo"
+    exit 1
+fi
+
 echo "Adding AIDE rules for audit tools protection..."
 
 AIDE_CONF="/etc/aide/aide.conf"

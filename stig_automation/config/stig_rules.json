@@ -1,5 +1,5 @@
 {
-  "total_rules": 34,
+  "total_rules": 26,
   "rules": [
     {
       "rule_id": "UBTU-24-90890",
@@ -155,15 +155,6 @@
       "category": "mandatory_access_control"
     },
     {
-      "rule_id": "UBTU-24-100600",
-      "severity": "high",
-      "title": "OS must install libpam-pwquality package",
-      "description": "Ensure passwords are strong enough to resist brute-force and cracking",
-      "check_script": "UBTU-24-100600.sh",
-      "remediation_script": "UBTU-24-100600.sh",
-      "category": "authentication"
-    },
-    {
       "rule_id": "UBTU-24-100700",
       "severity": "high",
       "title": "OS must install chrony package for time synchronization",
@@ -233,51 +224,6 @@
       "description": "Prevent attacker from accessing root shell in single-user mode without password",
       "check_script": "UBTU-24-102000.sh",
       "remediation_script": "UBTU-24-102000.sh",
-      "category": "access_control"
-    },
-    {
-      "rule_id": "UBTU-24-200060",
-      "severity": "medium",
-      "title": "OS must automatically terminate user session after 10 minutes of inactivity",
-      "description": "Prevent attacker from exploiting inactive sessions",
-      "check_script": "UBTU-24-200060.sh",
-      "remediation_script": "UBTU-24-200060.sh",
-      "category": "session_management"
-    },
-    {
-      "rule_id": "UBTU-24-200250",
-      "severity": "medium",
-      "title": "OS must automatically expire temporary accounts within 72 hours",
-      "description": "Ensure temporary accounts do not exist too long (risk of information leakage)",
-      "check_script": "UBTU-24-200250.sh",
-      "remediation_script": "UBTU-24-200250.sh",
-      "category": "account_management"
-    },
-    {
-      "rule_id": "UBTU-24-200260",
-      "severity": "medium",
-      "title": "OS must automatically lock user accounts after 30 days of inactivity",
-      "description": "Remove risk from long-inactive accounts, comply with STIG requirements",
-      "check_script": "UBTU-24-200260.sh",
-      "remediation_script": "UBTU-24-200260.sh",
-      "category": "account_management"
-    },
-    {
-      "rule_id": "UBTU-24-200000",
-      "severity": "low",
-      "title": "OS must limit concurrent sessions to ten for all accounts",
-      "description": "Limit helps prevent DoS attacks by preventing too many sessions from one user, protecting system resources",
-      "check_script": "UBTU-24-200000.sh",
-      "remediation_script": "UBTU-24-200000.sh",
-      "category": "session_management"
-    },
-    {
-      "rule_id": "UBTU-24-200610",
-      "severity": "low",
-      "title": "OS must automatically lock account until released by administrator after three failed login attempts",
-      "description": "Account lockout after failed login attempts helps prevent brute-force attacks, reducing unauthorized access risk",
-      "check_script": "UBTU-24-200610.sh",
-      "remediation_script": "UBTU-24-200610.sh",
       "category": "access_control"
     },
     {

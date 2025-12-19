@@ -1,6 +1,12 @@
 #!/bin/bash
 # Remediation: Install SSH meta-package
 
+# Check if running as root
+if [ "$EUID" -ne 0 ]; then
+    echo "ERROR: This script must be run as root or with sudo"
+    exit 1
+fi
+
 echo "Starting remediation: Installing ssh meta-package..."
 
 # Check if all required packages are already installed

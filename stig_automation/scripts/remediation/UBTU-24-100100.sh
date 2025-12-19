@@ -2,6 +2,12 @@
 # Remediation: Install and initialize AIDE
 # Rule: UBTU-24-010007
 
+# Check if running as root
+if [ "$EUID" -ne 0 ]; then
+    echo "ERROR: This script must be run as root or with sudo"
+    exit 1
+fi
+
 echo "Installing AIDE..."
 
 # Check if already installed

@@ -1,6 +1,12 @@
 #!/bin/bash
 # Remediation: Configure SSH daemon to use FIPS 140-3 approved ciphers
 
+# Check if running as root
+if [ "$EUID" -ne 0 ]; then
+    echo "ERROR: This script must be run as root or with sudo"
+    exit 1
+fi
+
 echo "Starting remediation: Configuring SSH FIPS-approved ciphers..."
 
 # Check if openssh-server is installed

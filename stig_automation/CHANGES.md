@@ -1,5 +1,22 @@
 # Changelog - STIG Automation Tool
 
+## Total Rules: 26 (reduced from 36)
+
+## Removed Rules (Security Safety & User Choice)
+
+### Authentication/Password Related Rules (8 rules removed):
+
+1. **UBTU-24-100600** - libpam-pwquality (password complexity)
+2. **UBTU-24-200060** - Session timeout after 10 minutes
+3. **UBTU-24-200250** - Expire temporary accounts (72 hours)
+4. **UBTU-24-200260** - Lock inactive accounts (30 days)
+5. **UBTU-24-200000** - Limit concurrent sessions (10 max)
+6. **UBTU-24-200610** - Account lockout (3 failed attempts)
+7. **UBTU-24-300017** - Login delay (4 seconds)
+8. **UBTU-24-400340** - PAM cached authentication (1 day)
+
+**Reason**: User has VM snapshots for recovery, prefers to avoid any authentication-related issues
+
 ## Removed Rules (Security Safety)
 
 ### UBTU-24-100650 - SSSD Package Installation

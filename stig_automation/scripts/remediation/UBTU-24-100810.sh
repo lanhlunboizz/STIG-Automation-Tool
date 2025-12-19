@@ -1,6 +1,12 @@
 #!/bin/bash
 # Remediation: Enable and start SSH service
 
+# Check if running as root
+if [ "$EUID" -ne 0 ]; then
+    echo "ERROR: This script must be run as root or with sudo"
+    exit 1
+fi
+
 echo "Starting remediation: Enabling SSH service..."
 
 # Check if openssh-server is installed
