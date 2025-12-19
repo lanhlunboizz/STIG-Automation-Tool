@@ -10,8 +10,8 @@ AUDISP_CONF="/etc/audisp/audisp-remote.conf"
 # Install audispd-plugins if not present
 if ! dpkg -l | grep -q "^ii.*audispd-plugins"; then
     echo "Installing audispd-plugins..."
-    apt-get update
-    apt-get install -y audispd-plugins
+    apt-get update -qq 2>&1 | tail -5
+    apt-get install -y audispd-plugins 2>&1 | tail -5
 fi
 
 # Backup configs

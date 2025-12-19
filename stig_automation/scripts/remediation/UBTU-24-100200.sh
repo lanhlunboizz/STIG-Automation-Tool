@@ -4,9 +4,12 @@
 
 echo "Installing and configuring rsyslog..."
 
-# Install rsyslog
-apt-get update
-apt-get install -y rsyslog
+# Install rsyslog if not present
+if ! dpkg -l | grep -q "^ii.*rsyslog"; then
+    echo "Installing rsyslog..."
+    apt-get update -qq 2>&1 | tail -5
+    apt-get install -y rsyslog 2>&1 | tail -5
+fi
 
 # Enable and start rsyslog
 systemctl enable rsyslog

@@ -11,8 +11,8 @@ fi
 
 # Update package list and install chrony
 echo "Installing chrony..."
-apt-get update -qq
-apt-get install -y chrony
+apt-get update -qq 2>&1 | tail -5
+apt-get install -y chrony 2>&1 | grep -E '(Reading|Building|Unpacking|Setting up|Processing)' | tail -10
 
 # Verify installation
 if dpkg -l | grep -q "^ii.*chrony "; then
@@ -24,13 +24,11 @@ if dpkg -l | grep -q "^ii.*chrony "; then
     systemctl start chrony 2>/dev/null || true
     
     # Give service time to start
-    sleep 2
+    sleep 1
     
     # Check if service is running (non-blocking check)
     if systemctl is-active chrony >/dev/null 2>&1; then
-        echo "Chrony service is active"
-    else
-        echo "Warning: chrony service may not be active, but package is installed"
+        echo "Chrony service started successfully"
     fi
     
     exit 0

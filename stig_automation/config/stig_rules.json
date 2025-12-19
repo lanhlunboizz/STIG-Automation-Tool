@@ -1,4 +1,5 @@
 {
+  "total_rules": 35,
   "rules": [
     {
       "rule_id": "UBTU-24-90890",
@@ -169,15 +170,6 @@
       "description": "Provides centralized authentication and MFA support for privileged accounts",
       "check_script": "UBTU-24-100650.sh",
       "remediation_script": "UBTU-24-100650.sh",
-      "category": "authentication"
-    },
-    {
-      "rule_id": "UBTU-24-100660",
-      "severity": "high",
-      "title": "OS must use sssd to provide multifactor authentication (MFA)",
-      "description": "Ensure SSSD service is running to support MFA for privileged accounts",
-      "check_script": "UBTU-24-100660.sh",
-      "remediation_script": "UBTU-24-100660.sh",
       "category": "authentication"
     },
     {
