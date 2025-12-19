@@ -2,28 +2,26 @@
 # Remediation: Install and initialize AIDE
 # Rule: UBTU-24-010007
 
-echo "Installing and initializing AIDE..."
+echo "Installing AIDE..."
 
-# Install AIDE
-apt-get update
-apt-get install -y aide aide-common
-
-# Initialize AIDE database
-echo "Initializing AIDE database (this may take several minutes)..."
-aideinit
-
-# Move new database to production
-if [ -f /var/lib/aide/aide.db.new ]; then
-    mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
+# Check if already installed
+if command -v aide &> /dev/null; then
+    echo "AIDE already installed"
+    exit 0
 fi
 
-# Create cron job for daily AIDE checks
-cat > /etc/cron.daily/aide-check <<'EOF'
-#!/bin/bash
-/usr/bin/aide --check | mail -s "AIDE Report for $(hostname)" root
-EOF
+# Install AIDE
+echo "Installing aide and aide-common packages..."
+apt-get update -qq 2>&1 | tail -5
+DEBIAN_FRONTEND=noninteractive apt-get install -y aide aide-common 2>&1 | grep -E '(unpacking|Setting up)' | tail -5
 
-chmod +x /etc/cron.daily/aide-check
+# Verify installation
+if command -v aide &> /dev/null; then
+    echo "SUCCESS: AIDE installed"
+    exit 0
+else
+    echo "ERROR: AIDE installation failed"
+    exit 1
+fi
 
-echo "AIDE installed and initialized"
-exit 0
+
