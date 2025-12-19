@@ -45,6 +45,24 @@ fi
 
 if [ ${#missing_packages[@]} -eq 0 ]; then
     echo "SUCCESS: All SSSD packages installed successfully"
+    
+    # CRITICAL: Create minimal safe SSSD config to prevent auth lockout
+    SSSD_CONF="/etc/sssd/sssd.conf"
+    if [ ! -f "$SSSD_CONF" ]; then
+        echo "Creating minimal safe SSSD configuration..."
+        mkdir -p /etc/sssd
+        cat > "$SSSD_CONF" <<'EOF'
+[sssd]
+services = nss, pam
+domains = LOCAL
+
+[domain/LOCAL]
+id_provider = files
+EOF
+        chmod 600 "$SSSD_CONF"
+        echo "Minimal SSSD config created at $SSSD_CONF"
+    fi
+    
     exit 0
 else
     echo "ERROR: Failed to install packages: ${missing_packages[*]}"
