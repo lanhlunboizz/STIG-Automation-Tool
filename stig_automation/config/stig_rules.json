@@ -1,5 +1,5 @@
 {
-  "total_rules": 35,
+  "total_rules": 34,
   "rules": [
     {
       "rule_id": "UBTU-24-90890",
@@ -161,15 +161,6 @@
       "description": "Ensure passwords are strong enough to resist brute-force and cracking",
       "check_script": "UBTU-24-100600.sh",
       "remediation_script": "UBTU-24-100600.sh",
-      "category": "authentication"
-    },
-    {
-      "rule_id": "UBTU-24-100650",
-      "severity": "high",
-      "title": "OS must install sssd package",
-      "description": "Provides centralized authentication and MFA support for privileged accounts",
-      "check_script": "UBTU-24-100650.sh",
-      "remediation_script": "UBTU-24-100650.sh",
       "category": "authentication"
     },
     {

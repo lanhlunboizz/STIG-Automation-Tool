@@ -3,6 +3,15 @@
 
 echo "Starting remediation: Configuring SSH FIPS-approved ciphers..."
 
+# Check if openssh-server is installed
+if ! dpkg -l | grep -q "^ii.*openssh-server"; then
+    echo "ERROR: openssh-server not installed. Install it first (UBTU-24-100800)"
+    exit 1
+fi
+
+# Wait for SSH service to be ready
+sleep 2
+
 SSHD_CONFIG="/etc/ssh/sshd_config"
 # STIG UBTU-24-100820 requires exactly these 4 ciphers in this order
 FIPS_CIPHERS="aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes128-ctr"

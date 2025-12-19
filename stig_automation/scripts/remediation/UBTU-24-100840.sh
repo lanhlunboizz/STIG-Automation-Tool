@@ -3,6 +3,15 @@
 
 echo "Starting remediation: Configuring SSH FIPS-validated key exchange algorithms..."
 
+# Check if openssh-server is installed
+if ! dpkg -l | grep -q "^ii.*openssh-server"; then
+    echo "ERROR: openssh-server not installed. Install it first (UBTU-24-100800)"
+    exit 1
+fi
+
+# Wait for SSH service to be ready
+sleep 2
+
 SSHD_CONFIG="/etc/ssh/sshd_config"
 FIPS_KEX="ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256,diffie-hellman-group16-sha512,diffie-hellman-group14-sha256"
 

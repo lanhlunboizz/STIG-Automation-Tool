@@ -3,6 +3,15 @@
 
 echo "Starting remediation: Enabling SSH service..."
 
+# Check if openssh-server is installed
+if ! dpkg -l | grep -q "^ii.*openssh-server"; then
+    echo "ERROR: openssh-server not installed. Install it first (UBTU-24-100800)"
+    exit 1
+fi
+
+# Wait a moment for SSH service to be available after installation
+sleep 2
+
 # Detect SSH service name (ssh.service or sshd.service)
 if systemctl list-unit-files | grep -q "^ssh.service"; then
     SSH_SERVICE="ssh.service"
