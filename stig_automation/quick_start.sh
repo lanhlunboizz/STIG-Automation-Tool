@@ -26,6 +26,7 @@ pip3 install -r requirements.txt
 echo ""
 echo "Setting script permissions..."
 bash setup_permissions.sh
+chmod +x run_with_sudo.sh
 
 # Create directories
 echo ""
@@ -40,7 +41,7 @@ echo ""
 echo "Usage examples:"
 echo ""
 echo "  # Check locally (no remediation)"
-echo "  python3 main.py --mode local --check-only"
+echo "  ./run_with_sudo.sh --mode local --check-only"
 echo ""
 echo "  # Check and auto-fix locally (recommended)"
 echo "  ./run_with_sudo.sh --mode local --auto-remediate"

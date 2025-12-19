@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# STIG Automation Tool - Sudo Wrapper Script
+# Usage: ./run_with_sudo.sh --mode local --auto-remediate
+
 # Get the directory where this script is located
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 

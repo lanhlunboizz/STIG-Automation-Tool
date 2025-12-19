@@ -103,16 +103,6 @@ class STIGRemediator:
             self.logger.info(f"Executing remediation: {script_path}")
             returncode, stdout, stderr = self.executor.execute_script(script_path, timeout=120)
             
-            # Log script output for visibility
-            if stdout:
-                for line in stdout.strip().split('\n'):
-                    if line.strip():
-                        self.logger.info(f"  {rule_id}: {line}")
-            if stderr:
-                for line in stderr.strip().split('\n'):
-                    if line.strip():
-                        self.logger.warning(f"  {rule_id} stderr: {line}")
-            
             result['details'] = stdout.strip() if stdout else stderr.strip()
             
             if returncode == 0:

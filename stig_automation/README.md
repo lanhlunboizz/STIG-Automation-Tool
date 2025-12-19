@@ -29,7 +29,7 @@ chmox +x ./quick_start.sh #cấp quyền
 source venv/bin/activate
 
 # 1. Chỉ kiểm tra (không sửa)
-./run_with_sudo.sh main.py --mode local --check-only
+./run_with_sudo.sh --mode local --check-only
 
 # 2. Kiểm tra và tự động sửa (cần sudo)
 ./run_with_sudo.sh --mode local --auto-remediate
@@ -71,13 +71,17 @@ stig_automation/
 
 ## STIG Rules được hỗ trợ
 
-| Category        | Count | Examples                      |
-| --------------- | ----- | ----------------------------- |
-| CAT I (High)    | 8     | Password policy, SSH config   |
-| CAT II (Medium) | 20    | File permissions, audit rules |
-| CAT III (Low)   | 3     | System banners, timeouts      |
+**Tổng cộng: 36 rules**
+
+| Category        | Examples                                  |
+| --------------- | ----------------------------------------- |
+| CAT I (High)    | Password policy, SSH config, Time sync    |
+| CAT II (Medium) | File permissions, audit rules, PAM config |
+| CAT III (Low)   | System banners, timeouts, APT config      |
 
 Chi tiết: `config/stig_rules.json`
+
+**Lưu ý:** Tool chỉ hoạt động trên Ubuntu 24.04 LTS. Nếu check ra ít hơn 36 rules, xem log để tìm scripts bị ERROR.
 
 ## Output Files
 

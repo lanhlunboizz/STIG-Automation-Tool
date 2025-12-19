@@ -232,6 +232,11 @@ class STIGReporter:
                 # Check if improved
                 if pre_result.get('status') == 'FAIL' and post_result.get('status') == 'PASS':
                     combined_item['improved'] = True
+            else:
+                # If not in post_check but was PASS in pre_check, keep it as PASS
+                if pre_result.get('status') == 'PASS':
+                    combined_item['post_check_status'] = 'PASS'
+                    combined_item['post_check_message'] = 'Previously compliant (not re-checked)'
             
             combined.append(combined_item)
         
@@ -494,6 +499,7 @@ class STIGReporter:
             <table>
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Rule ID</th>
                         <th>Title</th>
                         <th>Severity</th>
@@ -505,6 +511,7 @@ class STIGReporter:
                 <tbody>
                     {% for result in results %}
                     <tr class="{% if result.improved %}improved{% endif %}">
+                        <td><strong>{{ loop.index }}</strong></td>
                         <td><strong>{{ result.rule_id }}</strong></td>
                         <td>{{ result.title }}</td>
                         <td class="severity-{{ result.severity }}">{{ result.severity }}</td>
