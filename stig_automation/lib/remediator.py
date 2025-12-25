@@ -5,6 +5,7 @@ STIG Remediator - Engine tự động sửa lỗi STIG
 import os
 import json
 import logging
+import re
 from typing import Dict, List, Optional
 from datetime import datetime
 from .executor import CommandExecutor
@@ -49,6 +50,38 @@ class STIGRemediator:
             if rule.get('rule_id') == rule_id:
                 return rule
         return None
+    
+    def _clean_output(self, text: str, max_length: int = 300) -> str:
+        """Clean output by removing ANSI codes and truncating"""
+        if not text:
+            return ""
+        
+        # Remove ANSI color codes
+        text = re.sub(r'\x1b\[[0-9;]*m', '', text)
+        
+        # Remove carriage returns and extra newlines
+        text = text.replace('\r', '')
+        text = re.sub(r'\n{3,}', '\n\n', text)
+        
+        # Remove non-printable characters except newlines and tabs
+        text = ''.join(char for char in text if char.isprintable() or char in '\n\t')
+        
+        # Truncate if too long
+        if len(text) > max_length:
+            lines = text.split('\n')
+            truncated_lines = []
+            total_len = 0
+            
+            for line in lines:
+                if total_len + len(line) > max_length:
+                    truncated_lines.append(f"... (truncated {len(text) - total_len} chars)")
+                    break
+                truncated_lines.append(line)
+                total_len += len(line) + 1  # +1 for newline
+            
+            text = '\n'.join(truncated_lines)
+        
+        return text.strip()
     
     def remediate_rule(self, rule_id: str, force: bool = False) -> Dict:
         """
@@ -114,18 +147,23 @@ class STIGRemediator:
             
             returncode, stdout, stderr = self.executor.execute_script(script_path, timeout=120)
             
+            # Clean outputs
+            clean_stdout = self._clean_output(stdout, max_length=500)
+            clean_stderr = self._clean_output(stderr, max_length=300)
+            
             # Log detailed output
             self.logger.debug(f"\n📊 EXECUTION RESULTS:")
             self.logger.debug(f"   Return Code: {returncode}")
             self.logger.debug(f"   STDOUT Length: {len(stdout)} chars")
             self.logger.debug(f"   STDERR Length: {len(stderr)} chars")
             
-            if stdout:
-                self.logger.debug(f"\n📤 STDOUT:\n{stdout[:500]}{'...' if len(stdout) > 500 else ''}")
-            if stderr:
-                self.logger.debug(f"\n📤 STDERR:\n{stderr[:500]}{'...' if len(stderr) > 500 else ''}")
+            if clean_stdout:
+                self.logger.debug(f"\n📤 STDOUT:\n{clean_stdout}")
+            if clean_stderr:
+                self.logger.debug(f"\n📤 STDERR:\n{clean_stderr}")
             
-            result['details'] = stdout.strip() if stdout else stderr.strip()
+            # Store cleaned output in details
+            result['details'] = clean_stdout if clean_stdout else clean_stderr
             
             if returncode == 0:
                 result['status'] = 'SUCCESS'
@@ -135,13 +173,18 @@ class STIGRemediator:
                 result['status'] = 'FAILED' if not force else 'PARTIAL'
                 result['message'] = f'Remediation failed with exit code {returncode}'
                 self.logger.warning(f"⚠️  Rule {rule_id}: Remediation FAILED (exit code {returncode})")
-                self.logger.warning(f"   Error output: {stderr[:200]}")
+                
+                # Log clean error output (max 150 chars for CLI)
+                if clean_stderr:
+                    error_preview = clean_stderr.split('\n')[0][:150]  # First line, max 150 chars
+                    self.logger.warning(f"   Error: {error_preview}")
             
         except Exception as e:
             result['status'] = 'ERROR'
-            result['message'] = f'Remediation error: {str(e)}'
-            self.logger.error(f"💥 Rule {rule_id} remediation error: {e}")
-            self.logger.exception("Full traceback:")  # Log full exception traceback
+            error_msg = self._clean_output(str(e), max_length=200)
+            result['message'] = f'Remediation error: {error_msg}'
+            self.logger.error(f"💥 Rule {rule_id} remediation error: {error_msg}")
+            self.logger.debug("Full traceback:", exc_info=True)  # Full trace only in debug mode
         
         self.logger.info(f"{'='*80}\n")
         return result

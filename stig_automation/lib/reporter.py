@@ -5,6 +5,8 @@ Report Generator - Tạo báo cáo HTML/JSON cho STIG compliance
 import os
 import json
 import logging
+import re
+import html
 from datetime import datetime
 from typing import Dict, List
 from jinja2 import Template
@@ -23,6 +25,32 @@ class STIGReporter:
         
         # Create reports directory if not exists
         os.makedirs(reports_dir, exist_ok=True)
+    
+    def _clean_text_for_display(self, text: str, max_length: int = 200) -> str:
+        """Clean text for safe HTML/CLI display"""
+        if not text:
+            return ""
+        
+        # Remove ANSI color codes
+        text = re.sub(r'\x1b\[[0-9;]*m', '', text)
+        
+        # Remove carriage returns
+        text = text.replace('\r', '')
+        
+        # Remove non-printable characters except newlines
+        text = ''.join(char for char in text if char.isprintable() or char == '\n')
+        
+        # Truncate if too long
+        if len(text) > max_length:
+            text = text[:max_length] + "... (truncated)"
+        
+        # Escape HTML special characters
+        text = html.escape(text)
+        
+        # Convert newlines to <br> for HTML
+        text = text.replace('\n', '<br>')
+        
+        return text
     
     def generate_html_report(self, 
                            pre_check_results: List[Dict],
@@ -209,7 +237,7 @@ class STIGReporter:
                 'severity': pre_result.get('severity'),
                 'category': pre_result.get('category'),
                 'pre_check_status': pre_result.get('status'),
-                'pre_check_message': pre_result.get('message'),
+                'pre_check_message': self._clean_text_for_display(pre_result.get('message', ''), 150),
                 'remediation_status': None,
                 'remediation_message': None,
                 'post_check_status': None,
@@ -221,13 +249,17 @@ class STIGReporter:
             if rule_id in remediation_dict:
                 rem_result = remediation_dict[rule_id]
                 combined_item['remediation_status'] = rem_result.get('status')
-                combined_item['remediation_message'] = rem_result.get('message')
+                combined_item['remediation_message'] = self._clean_text_for_display(
+                    rem_result.get('message', ''), 150
+                )
             
             # Add post-check info if exists
             if rule_id in post_check_dict:
                 post_result = post_check_dict[rule_id]
                 combined_item['post_check_status'] = post_result.get('status')
-                combined_item['post_check_message'] = post_result.get('message')
+                combined_item['post_check_message'] = self._clean_text_for_display(
+                    post_result.get('message', ''), 150
+                )
                 
                 # Check if improved
                 if pre_result.get('status') == 'FAIL' and post_result.get('status') == 'PASS':
