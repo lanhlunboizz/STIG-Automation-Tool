@@ -3,16 +3,34 @@
 
 echo "Starting remediation: Installing chrony package..."
 
+# Function to wait for dpkg lock
+wait_for_lock() {
+    local max_wait=60
+    local waited=0
+    while fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
+        if [ $waited -ge $max_wait ]; then
+            echo "WARNING: dpkg lock timeout"
+            return 1
+        fi
+        sleep 3
+        waited=$((waited + 3))
+    done
+    return 0
+}
+
 # Check if already installed
 if dpkg -l | grep -q "^ii.*chrony "; then
     echo "chrony package is already installed"
     exit 0
 fi
 
-# Update package list and install chrony
+# Wait for dpkg lock and install chrony
 echo "Installing chrony..."
-apt-get update -qq
-apt-get install -y chrony
+wait_for_lock
+apt-get update -qq 2>&1 | tail -3
+
+wait_for_lock
+DEBIAN_FRONTEND=noninteractive apt-get install -y chrony 2>&1 | tail -5
 
 # Verify installation
 if dpkg -l | grep -q "^ii.*chrony "; then

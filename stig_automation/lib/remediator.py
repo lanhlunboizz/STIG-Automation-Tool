@@ -142,10 +142,11 @@ class STIGRemediator:
         
         try:
             # Thực thi remediation script
-            self.logger.info(f"⚙️  Executing script with 120s timeout...")
+            # Increased timeout to 180s to allow for dpkg lock wait
+            self.logger.info(f"⚙️  Executing script with 180s timeout...")
             self.logger.debug(f"   Command: bash {script_path}")
             
-            returncode, stdout, stderr = self.executor.execute_script(script_path, timeout=120)
+            returncode, stdout, stderr = self.executor.execute_script(script_path, timeout=180)
             
             # Clean outputs
             clean_stdout = self._clean_output(stdout, max_length=500)
@@ -201,6 +202,8 @@ class STIGRemediator:
         Returns:
             List of remediation results
         """
+        import time
+        
         self.remediation_results = []
         
         if not failed_results:
@@ -229,6 +232,14 @@ class STIGRemediator:
                     # Last attempt failed
                     result['message'] += f' (Failed after {max_retry} attempts)'
                     self.remediation_results.append(result)
+                else:
+                    # Wait before retry to allow dpkg lock to release
+                    self.logger.info(f"⏳ Waiting 5s before retry...")
+                    time.sleep(5)
+            
+            # Small delay between rules to prevent dpkg lock conflicts
+            if idx < len(failed_results):
+                time.sleep(2)
         
         # Summary
         success = sum(1 for r in self.remediation_results if r['status'] == 'SUCCESS')

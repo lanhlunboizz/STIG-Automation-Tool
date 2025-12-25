@@ -3,6 +3,21 @@
 
 echo "Starting remediation: Installing ssh meta-package..."
 
+# Function to wait for dpkg lock
+wait_for_lock() {
+    local max_wait=60
+    local waited=0
+    while fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
+        if [ $waited -ge $max_wait ]; then
+            echo "WARNING: dpkg lock timeout"
+            return 1
+        fi
+        sleep 3
+        waited=$((waited + 3))
+    done
+    return 0
+}
+
 # Check if all required packages are already installed
 if dpkg -l | grep -q "^ii.*openssh-client" && \
    dpkg -l | grep -q "^ii.*openssh-server" && \
@@ -12,10 +27,12 @@ if dpkg -l | grep -q "^ii.*openssh-client" && \
 fi
 
 # Update package list and install ssh meta-package
-# This will install openssh-client, openssh-server, and openssh-sftp-server
 echo "Installing ssh meta-package..."
-apt-get update -qq
-apt-get install -y ssh
+wait_for_lock
+apt-get update -qq 2>&1 | tail -3
+
+wait_for_lock
+DEBIAN_FRONTEND=noninteractive apt-get install -y ssh 2>&1 | tail -5
 
 # Verify installation
 if dpkg -l | grep -q "^ii.*openssh-client" && \
