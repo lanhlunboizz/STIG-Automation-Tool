@@ -90,26 +90,39 @@ Chi tiết: `config/stig_rules.json`
 
 ## Xử lý lỗi thường gặp
 
-**1. ModuleNotFoundError: paramiko**
+**1. ImportError: cannot import name 'STIGRemediator'**
+
+Tool **tự động clean Python cache** mỗi lần chạy. Nếu vẫn lỗi:
+
+```bash
+# Manual cleanup
+find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null
+find . -type f -name "*.pyc" -delete
+
+# Re-run
+python3 main.py --help
+```
+
+**2. ModuleNotFoundError: paramiko**
 
 ```bash
 pip3 install -r requirements.txt
 ```
 
-**2. Permission denied khi remediation**
+**3. Permission denied khi remediation**
 
 ```bash
 # Dùng wrapper script thay vì sudo python3 trực tiếp
 ./run_with_sudo.sh --mode local --auto-remediate
 ```
 
-**3. TabError: inconsistent use of tabs**
+**4. TabError: inconsistent use of tabs**
 
 ```bash
 python3 fix_indentation.py
 ```
 
-**4. Report files owned by root**
+**5. Report files owned by root**
 
 -   Đã fix tự động với `os.chmod(filepath, 0o664)` trong `reporter.py`
 

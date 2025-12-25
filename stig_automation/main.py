@@ -19,6 +19,19 @@ import logging
 import socket
 from datetime import datetime
 
+# Auto-cleanup Python cache on first import to prevent stale bytecode issues
+# This runs BEFORE importing lib modules, ensuring clean imports
+if not hasattr(sys, '_stig_cache_cleaned'):
+    import shutil
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    lib_pycache = os.path.join(script_dir, 'lib', '__pycache__')
+    if os.path.exists(lib_pycache):
+        try:
+            shutil.rmtree(lib_pycache)
+        except:
+            pass  # Ignore errors, not critical
+    sys._stig_cache_cleaned = True
+
 from lib import (
     CommandExecutor,
     STIGChecker,
