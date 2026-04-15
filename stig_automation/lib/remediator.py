@@ -290,3 +290,40 @@ class STIGRemediator:
             self.logger.info(f"Remediation results exported to {output_file}")
         except Exception as e:
             self.logger.error(f"Failed to export remediation results: {e}")
+    
+    def _execute_remediation(self, rule_id: str) -> bool:
+        """Execute remediation script for a rule."""
+        script_path = self.scripts_dir / "remediation" / f"{rule_id}.sh"
+        
+        if not script_path.exists():
+            self.logger.warning(f"⚠️  Remediation script not found: {script_path}")
+            return False
+        
+        try:
+            # Đọc nội dung script
+            with open(script_path, 'r', encoding='utf-8') as f:
+                script_content = f.read()
+            
+            # Tạo script tạm trên remote server
+            if self.executor.mode == 'ssh':
+                # Upload script lên server
+                temp_script = f"/tmp/remediation_{rule_id}.sh"
+                
+                # Tạo file trên remote
+                self.executor.execute(f"cat > {temp_script} << 'EOF'\n{script_content}\nEOF")
+                self.executor.execute(f"chmod +x {temp_script}")
+                
+                # Thực thi
+                result = self.executor.execute(f"bash {temp_script}", timeout=180)
+                
+                # Xóa file tạm
+                self.executor.execute(f"rm -f {temp_script}")
+            else:
+                # Chế độ local
+                result = self.executor.execute(f"bash {script_path}", timeout=180)
+            
+            return result['exit_code'] == 0
+        
+        except Exception as e:
+            self.logger.error(f"Error executing remediation for {rule_id}: {str(e)}")
+            return False

@@ -131,7 +131,7 @@ class CommandExecutor:
         Thực thi shell script
         
         Args:
-            script_path: Đường dẫn đến script
+            script_path: Đường dẫn đến script (đường dẫn local)
             timeout: Timeout in seconds
             
         Returns:
@@ -139,11 +139,49 @@ class CommandExecutor:
         """
         if self.mode == 'local':
             command = f"bash {script_path}"
+            return self.execute(command, timeout=timeout)
         else:
-            # Upload script to remote and execute
-            command = f"bash {script_path}"
-        
-        return self.execute(command, timeout=timeout)
+            # SSH mode: Upload script to remote server and execute
+            import os
+            
+            # Đọc nội dung script từ local
+            try:
+                with open(script_path, 'r', encoding='utf-8') as f:
+                    script_content = f.read()
+            except Exception as e:
+                self.logger.error(f"Failed to read script {script_path}: {e}")
+                return -1, "", f"Failed to read script: {e}"
+            
+            # Tạo remote path trong /tmp
+            script_name = os.path.basename(script_path)
+            remote_path = f"/tmp/stig_{script_name}"
+            
+            # Upload script lên remote server
+            try:
+                if self.ssh_client:
+                    sftp = self.ssh_client.open_sftp()
+                    with sftp.file(remote_path, 'w') as remote_file:
+                        remote_file.write(script_content)
+                    sftp.chmod(remote_path, 0o755)  # Make executable
+                    sftp.close()
+                    self.logger.debug(f"Uploaded script to {remote_path}")
+                else:
+                    return -1, "", "SSH client not initialized"
+            except Exception as e:
+                self.logger.error(f"Failed to upload script: {e}")
+                return -1, "", f"Failed to upload script: {e}"
+            
+            # Execute remote script
+            command = f"bash {remote_path}"
+            result = self.execute(command, timeout=timeout)
+            
+            # Cleanup: Remove remote script
+            try:
+                self.execute(f"rm -f {remote_path}", timeout=5)
+            except Exception as e:
+                self.logger.warning(f"Failed to cleanup remote script: {e}")
+            
+            return result
     
     def file_exists(self, path: str) -> bool:
         """Kiểm tra file có tồn tại không"""

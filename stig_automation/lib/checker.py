@@ -103,6 +103,42 @@ class STIGChecker:
         
         return result
     
+    def _run_check(self, rule_id: str) -> Dict[str, Any]:
+        """Run check script for a single rule."""
+        script_path = self.check_scripts_dir / "checks" / f"{rule_id}.sh"
+        
+        if not script_path.exists():
+            return {
+                'status': 'error',
+                'message': f'Check script not found: {script_path}'
+            }
+        
+        try:
+            # Đọc nội dung script
+            with open(script_path, 'r', encoding='utf-8') as f:
+                script_content = f.read()
+            
+            # Thực thi qua SSH hoặc local
+            if self.executor.mode == 'ssh':
+                temp_script = f"/tmp/check_{rule_id}.sh"
+                
+                # Upload và chạy script
+                self.executor.execute(f"cat > {temp_script} << 'EOF'\n{script_content}\nEOF")
+                self.executor.execute(f"chmod +x {temp_script}")
+                result = self.executor.execute(f"bash {temp_script}", timeout=30)
+                self.executor.execute(f"rm -f {temp_script}")
+            else:
+                result = self.executor.execute(f"bash {script_path}", timeout=30)
+            
+            # Xử lý kết quả
+            if result['exit_code'] == 0:
+                return {'status': 'pass', 'message': 'Check passed'}
+            else:
+                return {'status': 'fail', 'message': result.get('stderr', 'Check failed')}
+                
+        except Exception as e:
+            return {'status': 'error', 'message': str(e)}
+    
     def check_all(self, rule_ids: Optional[List[str]] = None) -> List[Dict]:
         """
         Kiểm tra tất cả rules hoặc một danh sách cụ thể
